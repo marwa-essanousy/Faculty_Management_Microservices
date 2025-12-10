@@ -24,7 +24,7 @@ spec:
             httpGet:
               path: /actuator/health
               port: 9090
-            initialDelaySeconds: 10
+            initialDelaySeconds: 45
             periodSeconds: 10
             failureThreshold: 5
 

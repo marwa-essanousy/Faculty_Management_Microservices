@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: faculty-mysql
+spec:
+  selector:
+    app: faculty-mysql
+  ports:
+    - port: 3306
+      targetPort: 3306
+  type: ClusterIP
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: faculty-mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: faculty-mysql
+  template:
+    metadata:
+      labels:
+        app: faculty-mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8
+          env:
+            - name: MYSQL_ALLOW_EMPTY_PASSWORD
+              value: "yes"
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: mysql-storage
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-storage
+          emptyDir: {}
