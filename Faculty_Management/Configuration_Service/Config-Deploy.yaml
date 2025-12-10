@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: faculty-config-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: faculty-config-service
+  template:
+    metadata:
+      labels:
+        app: faculty-config-service
+    spec:
+      containers:
+        - name: faculty-config-service
+          image: faculty_management-faculty-config-service:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9999
+          env:
+            - name: DISCOVERY_SERVICE_URL
+              value: "http://faculty-discovery-service.default.svc.cluster.local:8761/eureka"
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 9999
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 4
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: faculty-config-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: faculty-config-service
+  ports:
+    - port: 9999
+      targetPort: 9999
