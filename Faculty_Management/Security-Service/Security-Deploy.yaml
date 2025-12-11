@@ -34,7 +34,7 @@ kind: Service
 metadata:
   name: faculty-security-service
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     app: faculty-security-service
   ports:

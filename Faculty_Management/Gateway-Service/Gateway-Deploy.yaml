@@ -34,7 +34,7 @@ kind: Service
 metadata:
   name: faculty-gateway-service
 spec:
-  type: NodePort    # si tu veux exposer le gateway depuis l'extérieur du cluster
+  type: LoadBalancer
   selector:
     app: faculty-gateway-service
   ports:
